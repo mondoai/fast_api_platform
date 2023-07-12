@@ -5,9 +5,12 @@ import coloredlogs
 
 # import coloredlogs
 from typing import Any
+from _platform.config.config import ServerConfig
 
 
-class __LoggerFactory:
+class LoggerFactory:
+    """TODO"""
+
     __loggers = {}
     __initialized = False
 
@@ -15,13 +18,19 @@ class __LoggerFactory:
         pass
 
     @classmethod
-    def init_logger_factory(cls, config: dict[Any, Any]):
-        logging.config.dictConfig(config["logger"])
+    async def init_module(cls):
+        """TODO"""
+
+        if cls.__initialized:
+            return
+
+        logging.config.dictConfig(ServerConfig.get("logger"))
         coloredlogs.install(fmt="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
         cls.__initialized = True
 
     @classmethod
     def get_logger(cls, name: str) -> logging.Logger:
+        """TODO"""
         if not cls.__initialized:
             raise Exception("logger factory not initialized!")
 
@@ -35,6 +44,3 @@ class __LoggerFactory:
                 logger=new_logger,
             )
             return new_logger
-
-
-logger_factory = __LoggerFactory()
